@@ -2279,6 +2279,7 @@ int
 AMQP_CALL
 amqp_socket_open(amqp_socket_t *self, const char *host, int port);
 
+
 /**
  * Open a socket connection.
  *
@@ -2300,6 +2301,25 @@ AMQP_PUBLIC_FUNCTION
 int
 AMQP_CALL
 amqp_socket_open_noblock(amqp_socket_t *self, const char *host, int port, struct timeval *timeout);
+
+/**
+ * Open a WebSocket connection. This function establishes the WebSocket connection to enable AMQP
+ * messaging over the WebSocket connection.
+ *
+ * This function should be called after initializing connection using amqp_new_connection(),
+ * creating a WebSocket object using amqp_websocket_new().
+ *
+ * \param [in,out] self A socket object.
+ * \param [in] url A connection url. The url is comprised of <scheme>://<host>[:port]/[path]
+ *                 For example: ws://localhost:8001/amqp. For secure connection use wss as a scheme.
+ *
+ * \return AMQP_STATUS_OK on success, an amqp_status_enum on failure.
+ *
+ */
+AMQP_PUBLIC_FUNCTION
+int
+AMQP_CALL
+amqp_websocket_open(amqp_socket_t *self, const char *url);
 
 /**
  * Get the socket descriptor in use by a socket object.

@@ -225,6 +225,17 @@ amqp_socket_open(amqp_socket_t *self, const char *host, int port)
 }
 
 int
+amqp_websocket_open(amqp_socket_t *self, const char *url)
+{
+	assert(self);
+	assert(self->klass->open);
+
+	/* TODO: port is ignored internally.
+	       host, port and path along with scheme are all available in url.*/
+	return self->klass->open(self, url, 0, NULL);
+}
+
+int
 amqp_socket_open_noblock(amqp_socket_t *self, const char *host, int port, struct timeval *timeout)
 {
   assert(self);
@@ -575,7 +586,7 @@ static int recv_with_timeout(amqp_connection_state_t state, uint64_t start, stru
       pfd.revents = 0;
 
       timeout_ms = timeout->tv_sec * AMQP_MS_PER_S +
-          timeout->tv_usec / AMQP_US_PER_MS;
+          timeout->tv_usec * AMQP_US_PER_MS;
 
       res = poll(&pfd, 1, timeout_ms);
 
