@@ -131,6 +131,8 @@ set(RABBITMQ_SOURCES
     amqp_table.c amqp_url.c amqp_socket.h amqp_tcp_socket.c amqp_tcp_socket.h
     amqp_timer.c amqp_timer.h
     amqp_consumer.c
+    amqp_websocket.h amqp_websocket.c
+    kws_websocket.h kws_websocket.c kws_rfc6455util.h kws_rfc6455util.c kws_websocket_channel.h
     ${AMQP_SSL_SRCS}
 )
 
