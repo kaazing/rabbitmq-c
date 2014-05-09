@@ -14,6 +14,8 @@
 
 #include "kws_websocket.h"
 
+#include <stdlib.h>
+
 struct amqp_websocket_t {
 	const struct amqp_socket_class_t *klass;
 	int sockfd;
@@ -22,13 +24,6 @@ struct amqp_websocket_t {
 	size_t buffer_length;
 	int internal_error;
 };
-
-static ssize_t
-amqp_websocket_writev(void *base, struct iovec *iov, int iovcnt)
-{
-	/* TODO: implement */
-}
-
 
 static ssize_t
 amqp_websocket_send(void *base, const void *buf, size_t len)
@@ -40,8 +35,38 @@ amqp_websocket_send(void *base, const void *buf, size_t len)
 }
 
 static ssize_t
+amqp_websocket_writev(void *base, struct iovec *iov, int iovcnt)
+{
+	/* NOTE: Until the WebSocket library supports Scatter-Gather I/O,
+	 * the buffers are combined into a single buffer  */
+	/* Copying data from multiple memory locations to a single buffer is a bit efficient. */
+	ssize_t length = 0;
+	ssize_t offset;
+	char *data = NULL;
+	int i;
+
+	for (i = 0; i < iovcnt; i++) {
+		length += iov[i].iov_len;
+	}
+
+	data = malloc(length * sizeof(char));
+
+	if (!data) {
+		return AMQP_STATUS_NO_MEMORY;
+	}
+
+	offset = 0;
+	for (i = 0; i < iovcnt; i++) {
+		memcpy(&data[offset], iov[i].iov_base, iov[i].iov_len);
+		offset += iov[i].iov_len;
+	}
+	return amqp_websocket_send(base, data, length);
+}
+
+static ssize_t
 amqp_websocket_recv(void *base, void *buf, size_t len, int flags)
 {
+	/* TODO: Assuming flags = 0 */
 	/* Receive message over WebSocket connection */
 	struct amqp_websocket_t *self = (struct amqp_websocket_t *)base;
 	kws_message_event_t *evt = kws_recv(self->ws);
