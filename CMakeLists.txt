@@ -1,6 +1,6 @@
 # vim:set ts=2 sw=2 sts=2 et:
 cmake_minimum_required(VERSION 2.6)
-project(rabbitmq-c "C")
+project(rabbitmq-c)
 
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
 
@@ -278,6 +278,7 @@ endif ()
 if (BUILD_TESTS)
   enable_testing()
   add_subdirectory(tests)
+  add_subdirectory(robot-tests)
 endif (BUILD_TESTS)
 
 if (BUILD_API_DOCS)

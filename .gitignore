@@ -63,6 +63,10 @@ tools/doc/man-date.ent
 .ycm_extra_conf.py*
 .DS_Store
 
+build/
+robot-tests/build/
+.project
+
 # Ignore editor swap files
 *~
 *.sw?
