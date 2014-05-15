@@ -43,11 +43,13 @@ target_link_libraries(amqp_bind ${RMQ_LIBRARY_TARGET})
 add_executable(amqp_listenq amqp_listenq.c ${COMMON_SRCS})
 target_link_libraries(amqp_listenq ${RMQ_LIBRARY_TARGET})
 
-add_executable(amqp_listen_websocket amqp_listen_websocket.c ${COMMON_SRCS})
-target_link_libraries(amqp_listen_websocket ${RMQ_LIBRARY_TARGET})
+if (ENABLE_WEBSOCKET_TRANSPORT)
+	add_executable(amqp_listen_websocket amqp_listen_websocket.c ${COMMON_SRCS})
+	target_link_libraries(amqp_listen_websocket ${RMQ_LIBRARY_TARGET})
 
-add_executable(amqp_sendstring_websocket amqp_sendstring_websocket.c ${COMMON_SRCS})
-target_link_libraries(amqp_sendstring_websocket ${RMQ_LIBRARY_TARGET})
+	add_executable(amqp_sendstring_websocket amqp_sendstring_websocket.c ${COMMON_SRCS})
+	target_link_libraries(amqp_sendstring_websocket ${RMQ_LIBRARY_TARGET})
+endif(ENABLE_WEBSOCKET_TRANSPORT)
 
 if (ENABLE_SSL_SUPPORT)
 add_executable(amqps_connect_timeout amqps_connect_timeout.c ${COMMON_SRCS})

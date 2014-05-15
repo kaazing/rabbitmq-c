@@ -14,6 +14,7 @@
 
 #include "kws_websocket.h"
 
+#include <assert.h>
 #include <stdlib.h>
 
 struct amqp_websocket_t {
@@ -144,4 +145,15 @@ amqp_socket_t * amqp_websocket_new(amqp_connection_state_t state) {
 	amqp_set_socket(state, (amqp_socket_t *)self);
 
 	return (amqp_socket_t *)self;
+}
+
+int
+amqp_websocket_open(amqp_socket_t *self, const char *url)
+{
+	assert(self);
+	assert(self->klass->open);
+
+	/* TODO: port is ignored internally.
+	       host, port and path along with scheme are all available in url.*/
+	return self->klass->open(self, url, 0, NULL);
 }

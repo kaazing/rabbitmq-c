@@ -225,17 +225,6 @@ amqp_socket_open(amqp_socket_t *self, const char *host, int port)
 }
 
 int
-amqp_websocket_open(amqp_socket_t *self, const char *url)
-{
-	assert(self);
-	assert(self->klass->open);
-
-	/* TODO: port is ignored internally.
-	       host, port and path along with scheme are all available in url.*/
-	return self->klass->open(self, url, 0, NULL);
-}
-
-int
 amqp_socket_open_noblock(amqp_socket_t *self, const char *host, int port, struct timeval *timeout)
 {
   assert(self);
