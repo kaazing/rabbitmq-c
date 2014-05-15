@@ -231,6 +231,7 @@ option(BUILD_TESTS "Build tests (run tests with make test)" ON)
 option(BUILD_API_DOCS "Build Doxygen API docs" ${DOXYGEN_FOUND})
 option(ENABLE_SSL_SUPPORT "Enable SSL support" ON)
 option(ENABLE_THREAD_SAFETY "Enable thread safety when using OpenSSL" ${Threads_FOUND})
+option(ENABLE_WEBSOCKET_TRANSPORT "Enable websocket transport for AMQP messaging over WebSocket connection" OFF)
 
 set(SSL_ENGINE "OpenSSL" CACHE STRING "SSL Backend to use, valid options: OpenSSL, cyaSSL, GnuTLS, PolarSSL")
 mark_as_advanced(SSL_ENGINE)

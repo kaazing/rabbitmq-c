@@ -119,6 +119,11 @@ if (ENABLE_SSL_SUPPORT)
   endif()
 endif()
 
+if (ENABLE_WEBSOCKET_TRANSPORT)
+	set(AMQP_WEBSOCKET_H_PATH amqp_websocket.h)
+	set(AMQP_WEBSOCKET_SRCS amqp_websocket.h amqp_websocket.c kws_websocket.h kws_websocket.c kws_rfc6455util.h kws_rfc6455util.c kws_websocket_channel.h)
+endif(ENABLE_WEBSOCKET_TRANSPORT)
+
 set(RABBITMQ_SOURCES
     ${AMQP_FRAMING_H_PATH}
     ${AMQP_FRAMING_C_PATH}
@@ -126,8 +131,7 @@ set(RABBITMQ_SOURCES
     amqp_table.c amqp_url.c amqp_socket.h amqp_tcp_socket.c amqp_tcp_socket.h
     amqp_timer.c amqp_timer.h
     amqp_consumer.c
-    amqp_websocket.h amqp_websocket.c
-    kws_websocket.h kws_websocket.c kws_rfc6455util.h kws_rfc6455util.c kws_websocket_channel.h
+    ${AMQP_WEBSOCKET_SRCS}
     ${AMQP_SSL_SRCS}
 )
 
@@ -186,6 +190,7 @@ install(FILES
   amqp_tcp_socket.h
   ${AMQP_SSL_SOCKET_H_PATH}
   ${STDINT_H_INSTALL_FILE}
+  ${AMQP_WEBSOCKET_H_PATH}
   DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
     )
 
