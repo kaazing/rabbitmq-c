@@ -1,24 +1,17 @@
+/* vim:set ft=c ts=2 sw=2 sts=2 et cindent: */
+/** \file */
 /*
  * amqp_webSocket.h
  *
  *  Created on: Apr 28, 2014
  *      Author: pkhanal
  */
-
 /**
  * A WebSocket connection.
  */
 
 #ifndef AMQP_WEBSOCKET_H
 #define AMQP_WEBSOCKET_H
-
-#ifdef __cplusplus
-#define AMQP_BEGIN_DECLS extern "C" {
-#define AMQP_END_DECLS }
-#else
-#define AMQP_BEGIN_DECLS
-#define AMQP_END_DECLS
-#endif
 
 #include <amqp.h>
 

@@ -39,27 +39,46 @@ int main(int argc, char const *const *argv)
   exchange = argv[2];
   bindingkey = argv[3];
 
+  /* Initialize AMQP connection object */
   conn = amqp_new_connection();
 
+  /*
+   * Initialize underlying transport object
+   * We are using WebSocket as a transport protocol for AMQP messaging
+   */
   socket = amqp_websocket_new(conn);
   if (!socket) {
     die("creating WebSocket");
   }
 
+  /* Establish WebSocket connection */
   status = amqp_websocket_open(socket, url);
   if (status) {
     die("opening WebSocket connection");
   }
 
-  die_on_amqp_error(amqp_login(conn, "/", 0, 131072, 0, AMQP_SASL_METHOD_PLAIN, "guest", "guest"),
+  /* Establish AMQP connection against the backend broker */
+  die_on_amqp_error(amqp_login(conn, "/", 0, AMQP_DEFAULT_FRAME_SIZE, 0, AMQP_SASL_METHOD_PLAIN, "guest", "guest"),
                     "Logging in");
+
+  /* Open Channel
+   * To get the status of call to open channel, amqp_get_rpc_reply should be used
+   * amqp_get_rpc_reply() returns the most recent amqp_rpc_reply_t instance corresponding
+   * to such an API operation for the given connection.
+   */
   amqp_channel_open(conn, 1);
   die_on_amqp_error(amqp_get_rpc_reply(conn), "Opening channel");
 
   {
+	/* Declare Queue
+	 * In this case we are providing empty name that results in server creating a unique
+	 * queue name and sending it to the client
+	 */
     amqp_queue_declare_ok_t *r = amqp_queue_declare(conn, 1, amqp_empty_bytes, 0, 0, 0, 1,
                                  amqp_empty_table);
     die_on_amqp_error(amqp_get_rpc_reply(conn), "Declaring queue");
+
+    /* Get the queue name sent by the server */
     queuename = amqp_bytes_malloc_dup(r->queue);
     if (queuename.bytes == NULL) {
       fprintf(stderr, "Out of memory while copying queue name");
@@ -67,10 +86,15 @@ int main(int argc, char const *const *argv)
     }
   }
 
+  /* Bind queue to an exchange */
   amqp_queue_bind(conn, 1, queuename, amqp_cstring_bytes(exchange), amqp_cstring_bytes(bindingkey),
                   amqp_empty_table);
   die_on_amqp_error(amqp_get_rpc_reply(conn), "Binding queue");
 
+  /* Start a queue consumer.
+   * This method asks the server to start a "consumer", which is a transient request
+   * for messages from a specific queue.
+   */
   amqp_basic_consume(conn, 1, queuename, amqp_empty_bytes, 0, 1, 0, amqp_empty_table);
   die_on_amqp_error(amqp_get_rpc_reply(conn), "Consuming");
 
@@ -81,6 +105,10 @@ int main(int argc, char const *const *argv)
 
       amqp_maybe_release_buffers(conn);
 
+      /* Wait for and consume a message
+       * The function waits for a basic.deliver method on any channel, upon receipt of
+       * basic.deliver it reads that message, and returns.
+       */
       res = amqp_consume_message(conn, &envelope, NULL, 0);
 
       if (AMQP_RESPONSE_NORMAL != res.reply_type) {

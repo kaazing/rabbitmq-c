@@ -233,6 +233,12 @@ option(ENABLE_SSL_SUPPORT "Enable SSL support" ON)
 option(ENABLE_THREAD_SAFETY "Enable thread safety when using OpenSSL" ${Threads_FOUND})
 option(ENABLE_WEBSOCKET_TRANSPORT "Enable websocket transport for AMQP messaging over WebSocket connection" OFF)
 
+
+if (ENABLE_WEBSOCKET_TRANSPORT)
+  find_library(WEBSOCKET_LIBS kws_websocket ${WEBSOCKET_LIB_PATH}/lib/)
+  message(STATUS "websocket library found - " ${WEBSOCKET_LIBS})
+endif(ENABLE_WEBSOCKET_TRANSPORT)
+
 set(SSL_ENGINE "OpenSSL" CACHE STRING "SSL Backend to use, valid options: OpenSSL, cyaSSL, GnuTLS, PolarSSL")
 mark_as_advanced(SSL_ENGINE)
 
