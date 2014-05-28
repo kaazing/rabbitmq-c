@@ -35,7 +35,7 @@ amqp_websocket_new(amqp_connection_state_t state);
  * Open a WebSocket connection. This function establishes the WebSocket connection to enable AMQP
  * messaging over the WebSocket connection.
  *
- * This function should be called after initializing connection using amqp_new_connection(),
+ * This function should be called after initializing connection using amqp_new_connection() and 
  * creating a WebSocket object using amqp_websocket_new().
  *
  * \param [in,out] self A socket object.
