@@ -37,21 +37,33 @@ int main(int argc, char const *const *argv)
   exchange = argv[2];
   routingkey = argv[3];
   messagebody = argv[4];
-
+  
+  /* Initialize AMQP connection object */
   conn = amqp_new_connection();
-
+  
+  /*
+   * Initialize underlying transport object
+   * We are using WebSocket as a transport protocol for AMQP messaging
+   */
   socket = amqp_websocket_new(conn);
   if (!socket) {
     die("creating WebSocket");
   }
 
+  /* Establish WebSocket connection */  
   status = amqp_websocket_open(socket, url);
   if (status) {
     die("opening WebSocket connection");
   }
-
+  
+  /* Establish AMQP connection against the backend broker */
   die_on_amqp_error(amqp_login(conn, "/", 0, 131072, 0, AMQP_SASL_METHOD_PLAIN, "guest", "guest"),
-                    "Logging in");
+  
+  /* Open Channel
+   * To get the status of call to open channel, amqp_get_rpc_reply should be used
+   * amqp_get_rpc_reply() returns the most recent amqp_rpc_reply_t instance corresponding
+   * to such an API operation for the given connection.
+   */                  "Logging in");
   amqp_channel_open(conn, 1);
   die_on_amqp_error(amqp_get_rpc_reply(conn), "Opening channel");
 
@@ -60,6 +72,8 @@ int main(int argc, char const *const *argv)
     props._flags = AMQP_BASIC_CONTENT_TYPE_FLAG | AMQP_BASIC_DELIVERY_MODE_FLAG;
     props.content_type = amqp_cstring_bytes("text/plain");
     props.delivery_mode = 2; /* persistent delivery mode */
+
+    /* Publish a message to the broker on an exchange with a routing key. */
     die_on_error(amqp_basic_publish(conn,
                                     1,
                                     amqp_cstring_bytes(exchange),

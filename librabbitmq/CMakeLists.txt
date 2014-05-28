@@ -76,6 +76,11 @@ set(LIBRABBITMQ_INCLUDE_DIRS
 
 add_definitions(-DHAVE_CONFIG_H)
 
+if (ENABLE_WEBSOCKET_TRANSPORT)
+  include_directories(${WEBSOCKET_LIB_PATH}/include/)
+  set(WEBSOCKET_LIBRARY ${WEBSOCKET_LIBS})
+endif(ENABLE_WEBSOCKET_TRANSPORT)
+
 if (ENABLE_SSL_SUPPORT)
   add_definitions(-DWITH_SSL=1)
   set(AMQP_SSL_SOCKET_H_PATH amqp_ssl_socket.h)
@@ -126,7 +131,7 @@ endif()
 
 if (ENABLE_WEBSOCKET_TRANSPORT)
 	set(AMQP_WEBSOCKET_H_PATH amqp_websocket.h)
-	set(AMQP_WEBSOCKET_SRCS amqp_websocket.h amqp_websocket.c kws_websocket.h kws_websocket.c kws_rfc6455util.h kws_rfc6455util.c kws_websocket_channel.h)
+	set(AMQP_WEBSOCKET_SRCS amqp_websocket.h amqp_websocket.c)
 endif(ENABLE_WEBSOCKET_TRANSPORT)
 
 set(RABBITMQ_SOURCES
@@ -144,7 +149,7 @@ add_definitions(-DAMQP_BUILD)
 
 include(InstallMacros)
 
-set(RMQ_LIBRARIES ${AMQP_SSL_LIBS} ${SOCKET_LIBRARIES} ${LIBRT} ${CMAKE_THREAD_LIBS_INIT})
+set(RMQ_LIBRARIES ${AMQP_SSL_LIBS} ${SOCKET_LIBRARIES} ${LIBRT} ${CMAKE_THREAD_LIBS_INIT} ${WEBSOCKET_LIBRARY})
 
 if (BUILD_SHARED_LIBS)
     add_library(rabbitmq SHARED ${RABBITMQ_SOURCES})
