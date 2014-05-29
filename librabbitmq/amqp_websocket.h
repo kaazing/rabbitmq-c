@@ -6,22 +6,22 @@
  *  Created on: Apr 28, 2014
  *      Author: pkhanal
  */
-/**
- * A WebSocket connection.
- */
 
 #ifndef AMQP_WEBSOCKET_H
 #define AMQP_WEBSOCKET_H
 
 #include <amqp.h>
+#include <kws_websocket.h>
 
 AMQP_BEGIN_DECLS
 
 /**
- * Create a new WebSocket. This function is used to enabled AMQP messaging over WebSocket.
- * Once WebSocket is created, Call amqp_websocket_open to establish the WebSocket connection.
  *
- * Call amqp_connection_close() to release socket resources.
+ * Creates a new amqp_socket_t object. The amqp_socket_t is the abstract base structure that encapsulates the
+ * underlying transport layer based on the API used to create it. The underlying transport used is this case
+ * is WebSocket. The function should be called after allocating and initializing a new amqp_connection_state_t
+ * object via amqp_new_connection()
+ *
  *
  * \return A new socket object or NULL if an error occurred.
  *
@@ -30,6 +30,19 @@ AMQP_PUBLIC_FUNCTION
 amqp_socket_t *
 AMQP_CALL
 amqp_websocket_new(amqp_connection_state_t state);
+
+/**
+ *
+ * Returns the pointer to underlying kws_websocket object.
+ *
+ *
+ * \return A kws_websocket object pointer.
+ *
+ */
+AMQP_PUBLIC_FUNCTION
+kws_websocket *
+AMQP_CALL
+amqp_websocket_get(amqp_socket_t *self);
 
 /**
  * Open a WebSocket connection. This function establishes the WebSocket connection to enable AMQP

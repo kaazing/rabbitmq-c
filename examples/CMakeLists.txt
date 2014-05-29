@@ -44,6 +44,7 @@ add_executable(amqp_listenq amqp_listenq.c ${COMMON_SRCS})
 target_link_libraries(amqp_listenq ${RMQ_LIBRARY_TARGET})
 
 if (ENABLE_WEBSOCKET_TRANSPORT)
+	include_directories(${WEBSOCKET_LIB_PATH}/include/)
 	add_executable(amqp_listen_websocket amqp_listen_websocket.c ${COMMON_SRCS})
 	target_link_libraries(amqp_listen_websocket ${RMQ_LIBRARY_TARGET})
 
