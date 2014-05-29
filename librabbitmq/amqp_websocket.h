@@ -33,14 +33,14 @@ amqp_websocket_new(amqp_connection_state_t state);
 
 /**
  *
- * Returns the pointer to underlying kws_websocket object.
+ * Returns the pointer to underlying kws_websocket_t object.
  *
  *
- * \return A kws_websocket object pointer.
+ * \return A kws_websocket_t object pointer.
  *
  */
 AMQP_PUBLIC_FUNCTION
-kws_websocket *
+kws_websocket_t *
 AMQP_CALL
 amqp_websocket_get(amqp_socket_t *self);
 

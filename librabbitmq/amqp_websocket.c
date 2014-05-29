@@ -18,7 +18,7 @@
 struct amqp_websocket_t {
 	const struct amqp_socket_class_t *klass;
 	int sockfd;
-	kws_websocket *ws;
+	kws_websocket_t *ws;
 	void *buffer;
 	size_t buffer_length;
 	int internal_error;
@@ -134,7 +134,7 @@ amqp_socket_t * amqp_websocket_new(amqp_connection_state_t state) {
 
 	amqp_set_socket(state, (amqp_socket_t *)self);
 
-	kws_websocket *ws = kws_websocket_new();
+	kws_websocket_t *ws = kws_websocket_new();
 	if (ws == NULL) {
 		return NULL;
 	}
@@ -143,7 +143,7 @@ amqp_socket_t * amqp_websocket_new(amqp_connection_state_t state) {
 	return (amqp_socket_t *)self;
 }
 
-kws_websocket * amqp_websocket_get(amqp_socket_t *base) {
+kws_websocket_t * amqp_websocket_get(amqp_socket_t *base) {
 	struct amqp_websocket_t *self = (struct amqp_websocket_t *)base;
 	return self->ws;
 }
