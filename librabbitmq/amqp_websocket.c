@@ -12,8 +12,6 @@
 #include "amqp_private.h"
 #include "amqp_websocket.h"
 
-#include "kws_websocket.h"
-
 #include <assert.h>
 #include <stdlib.h>
 
@@ -91,15 +89,7 @@ amqp_websocket_open_internal(void *base, const char *url)
 {
 	/* Establish WebSocket Connection */
 	struct amqp_websocket_t *self = (struct amqp_websocket_t *)base;
-	struct websocket_t *ws = kws_websocket_new();
-	int result = kws_connect(ws, url, NULL, NULL);
-	if (0 == result) {
-		self->ws = ws;
-		return AMQP_STATUS_OK;
-	}
-	else {
-		return result;
-	}
+	return kws_connect(self->ws, url, NULL, NULL);
 }
 
 static int
@@ -144,12 +134,21 @@ amqp_socket_t * amqp_websocket_new(amqp_connection_state_t state) {
 
 	amqp_set_socket(state, (amqp_socket_t *)self);
 
+	kws_websocket *ws = kws_websocket_new();
+	if (ws == NULL) {
+		return NULL;
+	}
+	self->ws = ws;
+
 	return (amqp_socket_t *)self;
 }
 
-int
-amqp_websocket_open(amqp_socket_t *self, const char *url)
-{
+kws_websocket * amqp_websocket_get(amqp_socket_t *base) {
+	struct amqp_websocket_t *self = (struct amqp_websocket_t *)base;
+	return self->ws;
+}
+
+int amqp_websocket_open(amqp_socket_t *self, const char *url) {
 	assert(self);
 	assert(self->klass->open);
 
@@ -157,3 +156,4 @@ amqp_websocket_open(amqp_socket_t *self, const char *url)
 	       host, port and path along with scheme are all available in url.*/
 	return self->klass->open(self, url, 0, NULL);
 }
+
