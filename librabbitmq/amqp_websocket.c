@@ -96,7 +96,7 @@ static int
 amqp_websocket_close(void *base)
 {
 	struct amqp_websocket_t *self = (struct amqp_websocket_t *)base;
-	kws_close(self->ws);
+	return kws_close(self->ws);
 }
 
 static int
