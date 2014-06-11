@@ -89,7 +89,7 @@ amqp_websocket_open_internal(void *base, const char *url)
 {
 	/* Establish WebSocket Connection */
 	struct amqp_websocket_t *self = (struct amqp_websocket_t *)base;
-	return kws_connect(self->ws, url, NULL, NULL);
+	return kws_connect(self->ws, url, "amqp-0-9-1", NULL);
 }
 
 static int
