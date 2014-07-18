@@ -48,9 +48,14 @@
 #include <stdlib.h>
 #include <string.h>
 
-#define INITIAL_FRAME_POOL_PAGE_SIZE 65536
-#define INITIAL_DECODING_POOL_PAGE_SIZE 131072
-#define INITIAL_INBOUND_SOCK_BUFFER_SIZE 131072
+#ifndef AMQP_INITIAL_FRAME_POOL_PAGE_SIZE
+#define AMQP_INITIAL_FRAME_POOL_PAGE_SIZE 65536
+#endif
+
+#ifndef AMQP_INITIAL_INBOUND_SOCK_BUFFER_SIZE
+#define AMQP_INITIAL_INBOUND_SOCK_BUFFER_SIZE 131072
+#endif
+
 
 #define ENFORCE_STATE(statevec, statenum)                                                 \
   {                                                                                       \
@@ -72,7 +77,7 @@ amqp_connection_state_t amqp_new_connection(void)
     return NULL;
   }
 
-  res = amqp_tune_connection(state, 0, INITIAL_FRAME_POOL_PAGE_SIZE, 0);
+  res = amqp_tune_connection(state, 0, AMQP_INITIAL_FRAME_POOL_PAGE_SIZE, 0);
   if (0 != res) {
     goto out_nomem;
   }
@@ -85,8 +90,8 @@ amqp_connection_state_t amqp_new_connection(void)
      is also the minimum frame size */
   state->target_size = 8;
 
-  state->sock_inbound_buffer.len = INITIAL_INBOUND_SOCK_BUFFER_SIZE;
-  state->sock_inbound_buffer.bytes = malloc(INITIAL_INBOUND_SOCK_BUFFER_SIZE);
+  state->sock_inbound_buffer.len = AMQP_INITIAL_INBOUND_SOCK_BUFFER_SIZE;
+  state->sock_inbound_buffer.bytes = malloc(AMQP_INITIAL_INBOUND_SOCK_BUFFER_SIZE);
   if (state->sock_inbound_buffer.bytes == NULL) {
     goto out_nomem;
   }
@@ -274,13 +279,21 @@ int amqp_handle_input(amqp_connection_state_t state,
     /* frame length is 3 bytes in */
     channel = amqp_d16(raw_frame, 1);
 
-    channel_pool = amqp_get_or_create_channel_pool(state, channel);
-    if (NULL == channel_pool) {
-      return AMQP_STATUS_NO_MEMORY;
+    if ((int)channel > state->channel_max) {
+      return AMQP_STATUS_BAD_AMQP_DATA;
     }
 
     state->target_size
       = amqp_d32(raw_frame, 3) + HEADER_SIZE + FOOTER_SIZE;
+
+    if ((size_t)state->frame_max < state->target_size) {
+      return AMQP_STATUS_BAD_AMQP_DATA;
+    }
+
+    channel_pool = amqp_get_or_create_channel_pool(state, channel);
+    if (NULL == channel_pool) {
+      return AMQP_STATUS_NO_MEMORY;
+    }
 
     amqp_pool_alloc_bytes(channel_pool, state->target_size, &state->inbound_buffer);
     if (NULL == state->inbound_buffer.bytes) {
