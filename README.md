@@ -16,12 +16,12 @@ rabbitmq-discuss mailing list:
 
 ## Latest Stable Version
 
-The latest stable release of [rabbitmq-c is v0.5.0](https://github.com/alanxz/rabbitmq-c/releases/tag/v0.5.0).
+The latest stable release of [rabbitmq-c is v0.5.1](https://github.com/alanxz/rabbitmq-c/releases/tag/v0.5.1).
 A complete list of changes can be found in the [Change Log](ChangeLog.md)
 
 The v0.5.0 source tarball can be downloaded from:
 
-<https://github.com/alanxz/rabbitmq-c/releases/download/v0.5.0/rabbitmq-c-0.5.0.tar.gz>
+<https://github.com/alanxz/rabbitmq-c/releases/download/v0.5.1/rabbitmq-c-0.5.1.tar.gz>
 
 API documentation for v0.5.0+ can viewed from:
 
@@ -113,9 +113,6 @@ In another terminal,
 You should see output similar to the following in the listener's
 terminal window:
 
-    Result 1
-    Frame type 1, channel 1
-    Method AMQP_BASIC_DELIVER_METHOD
     Delivery 1, exchange amq.direct routingkey test
     Content-type: text/plain
     ----

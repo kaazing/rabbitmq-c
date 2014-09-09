@@ -3,7 +3,7 @@
  * ***** BEGIN LICENSE BLOCK *****
  * Version: MIT
  *
- * Portions created by Alan Antonuk are Copyright (c) 2012-2013
+ * Portions created by Alan Antonuk are Copyright (c) 2012-2014
  * Alan Antonuk. All Rights Reserved.
  *
  * Portions created by VMware are Copyright (c) 2007-2012 VMware, Inc.
@@ -278,10 +278,6 @@ int amqp_handle_input(amqp_connection_state_t state,
     amqp_pool_t *channel_pool;
     /* frame length is 3 bytes in */
     channel = amqp_d16(raw_frame, 1);
-
-    if ((int)channel > state->channel_max) {
-      return AMQP_STATUS_BAD_AMQP_DATA;
-    }
 
     state->target_size
       = amqp_d32(raw_frame, 3) + HEADER_SIZE + FOOTER_SIZE;

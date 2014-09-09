@@ -1,6 +1,10 @@
 /* vim:set ft=c ts=2 sw=2 sts=2 et cindent: */
 /*
- * Copyright 2012-2013 Michael Steinert
+ * Portions created by Alan Antonuk are Copyright (c) 2012-2014 Alan Antonuk.
+ * All Rights Reserved.
+ *
+ * Portions created by Michael Steinert are Copyright (c) 2012-2014 Michael
+ * Steinert. All Rights Reserved.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a
  * copy of this software and associated documentation files (the "Software"),
@@ -23,10 +27,6 @@
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
-#endif
-
-#if defined(__APPLE__) && defined(__MACH__)
-# define MAC_OS_X_VERSION_MIN_REQUIRED MAC_OS_X_VERSION_10_6
 #endif
 
 #include "amqp_ssl_socket.h"
@@ -271,8 +271,8 @@ amqp_ssl_socket_open(void *base, const char *host, int port, struct timeval *tim
     goto error_out3;
   }
   if (self->verify) {
-    int status = amqp_ssl_socket_verify_hostname(self, host);
-    if (status) {
+    int verify_status = amqp_ssl_socket_verify_hostname(self, host);
+    if (verify_status) {
       self->internal_error = 0;
       status = AMQP_STATUS_SSL_HOSTNAME_VERIFY_FAILED;
       goto error_out3;

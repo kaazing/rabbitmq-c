@@ -6,6 +6,7 @@
 .libs
 /aclocal.m4
 /autom4te.cache
+/bin*
 /compile
 /config.guess
 /config.h
@@ -60,7 +61,7 @@ tools/amqp-publish
 tools/doc/*.1
 tools/doc/*.7
 tools/doc/man-date.ent
-.ycm_extra_conf.py*
+.ycm_extra_conf.py?
 .DS_Store
 
 build/

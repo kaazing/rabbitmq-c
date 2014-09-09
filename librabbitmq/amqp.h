@@ -4,7 +4,7 @@
  * ***** BEGIN LICENSE BLOCK *****
  * Version: MIT
  *
- * Portions created by Alan Antonuk are Copyright (c) 2012-2013
+ * Portions created by Alan Antonuk are Copyright (c) 2012-2014
  * Alan Antonuk. All Rights Reserved.
  *
  * Portions created by VMware are Copyright (c) 2007-2012 VMware, Inc.
@@ -224,7 +224,7 @@ AMQP_BEGIN_DECLS
 
 #define AMQP_VERSION_MAJOR 0
 #define AMQP_VERSION_MINOR 5
-#define AMQP_VERSION_PATCH 1
+#define AMQP_VERSION_PATCH 2
 #define AMQP_VERSION_IS_RELEASE 0
 
 

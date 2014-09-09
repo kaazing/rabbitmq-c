@@ -13,7 +13,7 @@ set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
 # 4. If any interfaces have been removed since the last public release, then set age to 0.
 
 set(RMQ_SOVERSION_CURRENT   3)
-set(RMQ_SOVERSION_REVISION  0)
+set(RMQ_SOVERSION_REVISION  1)
 set(RMQ_SOVERSION_AGE       2)
 
 math(EXPR RMQ_SOVERSION_MAJOR "${RMQ_SOVERSION_CURRENT} - ${RMQ_SOVERSION_AGE}")
@@ -36,6 +36,8 @@ set(VERSION ${_API_VERSION_MAJOR}.${_API_VERSION_MINOR}.${_API_VERSION_PATCH})
 
 if (MSVC)
   set(CMAKE_C_FLAGS "/W4 /nologo ${CMAKE_C_FLAGS}")
+elseif (CMAKE_C_COMPILER_ID MATCHES ".*Clang")
+  set(CMAKE_C_FLAGS "-Wall -Wextra -pedantic -Wstrict-prototypes -Wcast-align -Wno-unused-function -fno-common -fvisibility=hidden")
 elseif (CMAKE_COMPILER_IS_GNUCC)
   set(RMQ_C_FLAGS "-Wall -Wextra -pedantic -Wstrict-prototypes -Wcast-align -Wno-unused-function -fno-common")
   execute_process(COMMAND ${CMAKE_C_COMPILER} -dumpversion OUTPUT_VARIABLE GCC_VERSION)
@@ -103,7 +105,7 @@ set(CMAKE_REQUIRED_LIBRARIES ${SOCKET_LIBRARIES})
 if (WIN32)
   check_symbol_exists(htonll Winsock2.h HAVE_HTONLL)
 else (WIN32)
-  check_function_exists(htonll HAVE_HTONLL)
+  check_symbol_exists(htonll arpa/inet.h HAVE_HTONLL)
 endif (WIN32)
 cmake_pop_check_state()
 
