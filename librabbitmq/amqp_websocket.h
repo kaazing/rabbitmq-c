@@ -11,7 +11,7 @@
 #define AMQP_WEBSOCKET_H
 
 #include <amqp.h>
-#include <kws_websocket.h>
+#include <kaazing_websocket.h>
 
 AMQP_BEGIN_DECLS
 
@@ -40,7 +40,7 @@ amqp_websocket_new(amqp_connection_state_t state);
  *
  */
 AMQP_PUBLIC_FUNCTION
-kws_websocket_t *
+websocket_t *
 AMQP_CALL
 amqp_websocket_get(amqp_socket_t *self);
 
