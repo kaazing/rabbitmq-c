@@ -238,8 +238,10 @@ option(ENABLE_WEBSOCKET_TRANSPORT "Enable websocket transport for AMQP messaging
 
 
 if (ENABLE_WEBSOCKET_TRANSPORT)
-  find_library(WEBSOCKET_LIBS kws_websocket ${WEBSOCKET_LIB_PATH}/lib/)
+  LIST(APPEND CMAKE_FIND_LIBRARY_SUFFIXES ".so.1.0.0")
+  find_library(WEBSOCKET_LIBS "libwebsocket.so.1.0.0" ${WEBSOCKET_LIB_PATH}/lib/)
   message(STATUS "websocket library found - " ${WEBSOCKET_LIBS})
+  LIST(REMOVE_ITEM CMAKE_FIND_LIBRARY_SUFFIXES ".so.1.0.0")
 endif(ENABLE_WEBSOCKET_TRANSPORT)
 
 set(SSL_ENGINE "OpenSSL" CACHE STRING "SSL Backend to use, valid options: OpenSSL, cyaSSL, GnuTLS, PolarSSL")
