@@ -238,6 +238,7 @@ option(ENABLE_WEBSOCKET_TRANSPORT "Enable websocket transport for AMQP messaging
 
 
 if (ENABLE_WEBSOCKET_TRANSPORT)
+  add_definitions(-DKAAZING_WEBSOCKET)
   LIST(APPEND CMAKE_FIND_LIBRARY_SUFFIXES ".so.1.0.0")
   find_library(WEBSOCKET_LIBS "libwebsocket.so.1.0.0" ${WEBSOCKET_LIB_PATH}/lib/)
   message(STATUS "websocket library found - " ${WEBSOCKET_LIBS})

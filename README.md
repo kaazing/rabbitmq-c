@@ -1,3 +1,3 @@
 # RabbitMQ C AMQP client library
 
-## TODO: Update me
+## AMQP Messaging Over WebSocket
