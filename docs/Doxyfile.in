@@ -99,7 +99,8 @@ WARN_LOGFILE           =
 INPUT                  = @CMAKE_CURRENT_SOURCE_DIR@/README.md \
                          @CMAKE_CURRENT_SOURCE_DIR@/ChangeLog.md \
                          @CMAKE_CURRENT_SOURCE_DIR@/librabbitmq \
-                         @CMAKE_CURRENT_SOURCE_DIR@/docs
+                         @CMAKE_CURRENT_SOURCE_DIR@/docs \
+                         @WEBSOCKET_LIB_PATH@/include
 INPUT_ENCODING         = UTF-8
 FILE_PATTERNS          = *.h \
                          *.md
