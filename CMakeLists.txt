@@ -1,6 +1,6 @@
 # vim:set ts=2 sw=2 sts=2 et:
 cmake_minimum_required(VERSION 2.6)
-project(rabbitmq-c)
+project(rabbitmq-c "C" "CXX")
 
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
 
